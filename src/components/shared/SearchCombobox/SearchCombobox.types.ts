@@ -12,10 +12,13 @@ export type SearchComboboxSnippetProps<Item extends BaseItem> = {
 };
 
 export interface BaseSearchComboboxProps<Item extends BaseItem> {
-	items: Item[];
-	showList: boolean;
+	items?: Item[];
+	showList?: boolean;
 	placeholder?: string;
+  inputValue?: string;
+  onKeyDown?: (value: string) => void;
 	onSelect?: (item: Item) => void;
+  onPressEnter?: (value: string) => void;
 }
 
 export interface SearchComboboxProps<Item extends BaseItem> extends BaseSearchComboboxProps<Item> {

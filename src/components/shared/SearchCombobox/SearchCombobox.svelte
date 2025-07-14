@@ -2,19 +2,23 @@
 	import type { BaseItem, KeyPressedActions, SearchComboboxProps } from './SearchCombobox.types';
 
 	let {
-		items,
+		items = $bindable([]),
 		placeholder,
 		showList = $bindable(false),
+		inputValue = $bindable(''),
+		onPressEnter,
+		onKeyDown,
 		onSelect,
 		children
 	}: SearchComboboxProps<any> = $props();
 
-	let inputValue = $state('');
 	let focusedItemIndex = $state<number | null>(null);
 
-	let filtered = $derived(
-		items.filter((item) => item.toLowerCase().includes(inputValue.toLowerCase()))
-	);
+	$effect(() => {
+		if (items) {
+			focusedItemIndex = null;
+		}
+	});
 
 	const unfocusedItemKeyPressedActions: KeyPressedActions = new Map([
 		[
@@ -26,9 +30,10 @@
 		[
 			'ArrowUp',
 			() => {
-				focusedItemIndex = filtered.length - 1;
+				focusedItemIndex = items.length - 1;
 			}
-		]
+		],
+		['Enter', () => onPressEnter?.(inputValue)]
 	]);
 
 	// NOTE: Asuming that focusedItemIndex is not null
@@ -36,25 +41,39 @@
 		[
 			'ArrowDown',
 			() => {
-				focusedItemIndex = ((focusedItemIndex as number) + 1) % filtered.length;
+				focusedItemIndex = ((focusedItemIndex as number) + 1) % items.length;
 			}
 		],
 		[
 			'ArrowUp',
 			() => {
-				focusedItemIndex = ((focusedItemIndex as number) - 1 + filtered.length) % filtered.length;
+				focusedItemIndex = ((focusedItemIndex as number) - 1 + items.length) % items.length;
 			}
 		],
-		['Enter', () => choose(filtered[focusedItemIndex as number])]
+		['Enter', () => choose(items[focusedItemIndex as number])]
 	]);
 
-	function handleKey(event: KeyboardEvent) {
-		if (!filtered.length) return;
+	// debounce handleKey
+	//
+	function debounce(func: Function, delay: number) {
+		let timeout: NodeJS.Timeout;
+		return (...args: any[]) => {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => func(...args), delay);
+		};
+	}
 
+	function handleKey(event: KeyboardEvent) {
+		showList = true;
 		const keyPressedActions =
 			focusedItemIndex === null ? unfocusedItemKeyPressedActions : focusedItemKeyPressedActions;
 
 		keyPressedActions.get(event.key)?.();
+		if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+			return;
+		}
+
+		debounce(() => onKeyDown?.(inputValue), 300)();
 	}
 
 	function choose(item: BaseItem) {
@@ -63,14 +82,27 @@
 		focusedItemIndex = null;
 		onSelect?.(item);
 	}
+
+	// unfocus on click
+	let container: HTMLDivElement;
+
+	function handleUnfocus() {
+    focusedItemIndex = null;
+		showList = false;
+	}
 </script>
 
-<div class="combo">
+<div
+	class="combo"
+	role="presentation"
+	bind:this={container}
+	onfocusout={handleUnfocus}
+	aria-label="Search Combobox"
+>
 	<input
 		type="text"
 		bind:value={inputValue}
 		{placeholder}
-		oninput={() => (showList = true)}
 		onkeydown={handleKey}
 		onfocus={() => (showList = true)}
 		role="combobox"
@@ -80,16 +112,16 @@
 		aria-activedescendant={focusedItemIndex !== null ? `option-${focusedItemIndex}` : undefined}
 	/>
 
-	{#if showList && filtered.length > 0}
+	{#if showList && items.length > 0}
 		<ul id="search-list" role="listbox">
-			{#each filtered as item, i}
+			{#each items as item, i}
 				<li
 					role="option"
 					aria-selected={focusedItemIndex === i}
 					class:selected={focusedItemIndex === i}
 					onmousedown={() => choose(item)}
 				>
-					{@render children({ item: item })}
+					{@render children(item)}
 				</li>
 			{/each}
 		</ul>
@@ -99,13 +131,24 @@
 <style>
 	.combo {
 		position: relative;
-		width: 100%;
+    width: 800px;
 	}
 
 	input {
 		width: 100%;
-		padding: 0.5rem;
+		padding: 0.75rem 1rem;
 		font-size: 1rem;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		outline: none;
+		transition: border-color 0.2s;
+		background: #fafafa;
+		box-shadow: none;
+	}
+
+	input:focus {
+		border-color: #3f51b5;
+		box-shadow: 0 2px 8px rgba(63,81,181,0.08);
 	}
 
 	ul {
@@ -113,20 +156,29 @@
 		z-index: 10;
 		background: white;
 		border: 1px solid #ccc;
+		border-radius: 4px;
 		list-style: none;
 		margin: 0;
-		padding: 0;
+		padding: 0.25rem 0;
 		width: 100%;
-		max-height: 200px;
 		overflow-y: auto;
+		box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 	}
 
 	li {
-		padding: 0.5rem;
+		padding: 0.35rem 1rem;
 		cursor: pointer;
+		transition: background 0.2s;
+	}
+
+	li.selected,
+	li:hover {
+		background: #e3eafc;
 	}
 
 	li.selected {
-		background: #eee;
+		font-weight: 500;
+		color: #3f51b5;
 	}
+
 </style>
