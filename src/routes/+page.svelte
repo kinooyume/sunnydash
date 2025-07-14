@@ -1,6 +1,5 @@
-<script>
-	import Weather from "../app/Weather.svelte";
-
+<script lang="ts">
+	import ForecastBoard from "../components/features/ForecastBoard/ForecastBoard.svelte";
 </script>
 
-<Weather />
+<ForecastBoard/>
