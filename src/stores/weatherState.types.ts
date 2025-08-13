@@ -20,5 +20,6 @@ export type WeatherStateStatus =
 export type WeatherState = {
 	status: WeatherStateStatus;
 	city?: string;
+  country?: string;
 	forecast?: WeatherForecast;
 };
