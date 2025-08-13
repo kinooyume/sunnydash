@@ -16,7 +16,7 @@
 
 	$effect(() => {
 		if (items) {
-			focusedItemIndex = null;
+			focusedItemIndex = 0;
 		}
 	});
 
@@ -33,7 +33,17 @@
 				focusedItemIndex = items.length - 1;
 			}
 		],
-		['Enter', () => onPressEnter?.(inputValue)]
+		[
+			'Enter',
+			() => {
+				if (items.length > 0) {
+					focusedItemIndex = 0;
+					return;
+				}
+				choose(items[focusedItemIndex as number]);
+				onPressEnter?.(inputValue);
+			}
+		]
 	]);
 
 	// NOTE: Asuming that focusedItemIndex is not null
@@ -50,7 +60,13 @@
 				focusedItemIndex = ((focusedItemIndex as number) - 1 + items.length) % items.length;
 			}
 		],
-		['Enter', () => choose(items[focusedItemIndex as number])]
+		[
+			'Enter',
+			() => {
+				choose(items[focusedItemIndex as number]);
+				onPressEnter?.(inputValue);
+			}
+		]
 	]);
 
 	// debounce handleKey
@@ -80,14 +96,16 @@
 		inputValue = item.name;
 		showList = false;
 		focusedItemIndex = null;
+		inputRef?.blur();
 		onSelect?.(item);
 	}
 
 	// unfocus on click
-	let container: HTMLDivElement;
+
+	let inputRef: HTMLInputElement;
 
 	function handleUnfocus() {
-    focusedItemIndex = null;
+		focusedItemIndex = null;
 		showList = false;
 	}
 </script>
@@ -95,13 +113,13 @@
 <div
 	class="combo"
 	role="presentation"
-	bind:this={container}
 	onfocusout={handleUnfocus}
 	aria-label="Search Combobox"
 >
 	<input
 		type="text"
 		bind:value={inputValue}
+		bind:this={inputRef}
 		{placeholder}
 		onkeydown={handleKey}
 		onfocus={() => (showList = true)}
@@ -131,7 +149,7 @@
 <style>
 	.combo {
 		position: relative;
-    width: 800px;
+		width: 800px;
 	}
 
 	input {
@@ -148,7 +166,7 @@
 
 	input:focus {
 		border-color: #3f51b5;
-		box-shadow: 0 2px 8px rgba(63,81,181,0.08);
+		box-shadow: 0 2px 8px rgba(63, 81, 181, 0.08);
 	}
 
 	ul {
@@ -162,7 +180,7 @@
 		padding: 0.25rem 0;
 		width: 100%;
 		overflow-y: auto;
-		box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 	}
 
 	li {
@@ -180,5 +198,4 @@
 		font-weight: 500;
 		color: #3f51b5;
 	}
-
 </style>
