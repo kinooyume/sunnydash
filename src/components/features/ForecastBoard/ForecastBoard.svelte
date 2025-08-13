@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { getContext } from "svelte";
-	import type { WeatherState } from "../../../stores";
-	import type { Context } from "../../../services/context/context.types";
+	import { getContext } from 'svelte';
+	import type { WeatherState } from '../../../stores';
+	import type { Context } from '../../../services/context/context.types';
 
 	let weatherState = getContext<Context<WeatherState>>('weather-state');
 </script>
 
 {#if weatherState().forecast}
 	{#if weatherState().city}
-		<h2>Forecast for {weatherState().city}</h2>
+		<h2>Forecast for {weatherState().city} · {weatherState().country}</h2>
 	{/if}
 	<ul>
 		{#each weatherState().forecast!.time as date, i}
@@ -29,7 +29,7 @@
 	.card {
 		background: #fff;
 		border-radius: 8px;
-		box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 		padding: 1rem;
 		margin: 0.5rem 0;
 		border: 1px solid #ececec;
@@ -52,8 +52,8 @@
 		padding: 0;
 		margin: 0;
 		list-style: none;
-    display: flex;
-    gap: 12px;
+		display: flex;
+		gap: 12px;
 	}
 
 	li {

@@ -42,6 +42,7 @@
 			const forecast = await weatherDomains().weather.getForecast(loc);
 
 			weatherState().city = city;
+			weatherState().country = loc.country;
 			weatherState().forecast = forecast;
 			weatherState().status = { kind: WeatherStateStatusKind.OK };
 		} catch (err) {
@@ -66,9 +67,8 @@
 		try {
 			const cities: City[] | null = await weatherDomains().geocoding.searchCities({
 				name: inputValue,
-        count: 12
+				count: 12
 			});
-      console.log('Cities found:', cities, "for:", inputValue);
 			return cities
 				? cities.map((city, index) => ({
 						id: index,
@@ -86,8 +86,8 @@
 	};
 
 	const onKeyDown = async (inputValue: string) => {
-    items = await searchCities(inputValue);
-  };
+		items = await searchCities(inputValue);
+	};
 </script>
 
 <SearchCombobox bind:items {placeholder} {onSelect} {onPressEnter} {onKeyDown}>
