@@ -8,7 +8,6 @@
 <WeatherContext>
 	<Header />
 	<div class="container">
-		>
 		{@render children()}
 	</div>
 </WeatherContext>
