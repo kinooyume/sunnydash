@@ -1,8 +1,8 @@
 {
-	"name": "sunnydash",
-	"private": true,
-	"version": "0.0.1",
-	"type": "module",
+  "name": "sunnydash",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -13,7 +13,7 @@
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
 		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run && npm run test:e2e",
+		"test": "bun run test:unit --run && bun run test:e2e",
 		"test:e2e": "playwright test",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build"
