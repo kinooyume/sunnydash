@@ -155,10 +155,10 @@
 
 	input {
 		width: 100%;
-		padding: 0.75rem 1rem;
+		padding: 0.875rem 1.25rem;
 		font-size: 1rem;
 		border: 1px solid var(--border);
-		border-radius: 12px;
+		border-radius: 16px;
 		outline: none;
 		transition: all 0.2s ease;
 		background: var(--background);
@@ -173,37 +173,45 @@
 
 	input:focus {
 		border-color: var(--accent);
-		box-shadow: 0 0 0 2px rgba(248, 186, 136, 0.15);
+		box-shadow: 0 0 0 3px rgba(248, 186, 136, 0.12);
 	}
 
 	ul {
 		position: absolute;
 		z-index: 10;
-		background: var(--surface);
+		background: linear-gradient(180deg, var(--surface) 0%, #1a2a3d 100%);
 		border: 1px solid var(--border);
-		border-radius: 12px;
+		border-radius: 16px;
 		list-style: none;
 		margin: 0.5rem 0 0;
-		padding: 0.5rem 0;
+		padding: 0.5rem;
 		width: 100%;
+		max-height: 360px;
 		overflow-y: auto;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+		box-shadow:
+			0 4px 6px rgba(0, 0, 0, 0.1),
+			0 12px 24px rgba(0, 0, 0, 0.25);
 	}
 
 	li {
-		padding: 0.5rem 1rem;
+		padding: 0.625rem 0.875rem;
 		cursor: pointer;
-		transition: background 0.2s;
+		transition: all 0.15s ease;
 		color: var(--text);
+		border-radius: 10px;
+		margin: 2px 0;
 	}
 
-	li.selected,
 	li:hover {
-		background: var(--surface-hover);
+		background: rgba(255, 255, 255, 0.05);
 	}
 
 	li.selected {
-		font-weight: 500;
+		background: rgba(248, 186, 136, 0.1);
 		color: var(--accent);
+	}
+
+	li.selected:hover {
+		background: rgba(248, 186, 136, 0.15);
 	}
 </style>
