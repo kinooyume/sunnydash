@@ -15,26 +15,18 @@
 		display: flex;
 		width: 100%;
 		align-items: center;
-		gap: 8px;
-		padding: 1rem;
-		border-radius: 8px;
-		background: #fff;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-		border: 1px solid #ececec;
-		gap: 0.25rem;
+		gap: 0.5rem;
 	}
 
 	.city__name {
-		font-weight: 600;
-		font-size: 1.05rem;
-		color: #222;
-		margin-bottom: 0.25rem;
+		font-weight: 500;
+		font-size: 1rem;
+		color: var(--text-light);
 	}
 
 	.city__country,
 	.city__state {
-		color: #666;
-		font-size: 0.98rem;
-		margin-bottom: 0.1rem;
+		color: var(--accent-secondary);
+		font-size: 0.9rem;
 	}
 </style>

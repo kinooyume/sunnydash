@@ -150,52 +150,60 @@
 	.combo {
 		position: relative;
 		width: 800px;
+		max-width: 100%;
 	}
 
 	input {
 		width: 100%;
 		padding: 0.75rem 1rem;
 		font-size: 1rem;
-		border: 1px solid #ccc;
-		border-radius: 4px;
+		border: 1px solid var(--border);
+		border-radius: 12px;
 		outline: none;
-		transition: border-color 0.2s;
-		background: #fafafa;
+		transition: all 0.2s ease;
+		background: var(--background);
+		color: var(--text);
 		box-shadow: none;
 	}
 
+	input::placeholder {
+		color: var(--text);
+		opacity: 0.5;
+	}
+
 	input:focus {
-		border-color: #3f51b5;
-		box-shadow: 0 2px 8px rgba(63, 81, 181, 0.08);
+		border-color: var(--accent);
+		box-shadow: 0 0 0 2px rgba(248, 186, 136, 0.15);
 	}
 
 	ul {
 		position: absolute;
 		z-index: 10;
-		background: white;
-		border: 1px solid #ccc;
-		border-radius: 4px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 12px;
 		list-style: none;
-		margin: 0;
-		padding: 0.25rem 0;
+		margin: 0.5rem 0 0;
+		padding: 0.5rem 0;
 		width: 100%;
 		overflow-y: auto;
-		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 	}
 
 	li {
-		padding: 0.35rem 1rem;
+		padding: 0.5rem 1rem;
 		cursor: pointer;
 		transition: background 0.2s;
+		color: var(--text);
 	}
 
 	li.selected,
 	li:hover {
-		background: #e3eafc;
+		background: var(--surface-hover);
 	}
 
 	li.selected {
 		font-weight: 500;
-		color: #3f51b5;
+		color: var(--accent);
 	}
 </style>
