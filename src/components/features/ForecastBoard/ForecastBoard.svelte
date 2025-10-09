@@ -2,6 +2,7 @@
 	import { getContext } from 'svelte';
 	import type { WeatherState } from '../../../stores';
 	import type { Context } from '../../../services/context/context.types';
+	import { getWeatherIconPath } from '../../../domain/weatherIcon';
 
 	let weatherState = getContext<Context<WeatherState>>('weather-state');
 </script>
@@ -13,6 +14,11 @@
 	<ul>
 		{#each weatherState().forecast!.time as date, i}
 			<li class="card">
+				<img
+					src={getWeatherIconPath(weatherState().forecast!.weather_code[i])}
+					alt="weather icon"
+					class="weather-icon"
+				/>
 				{weatherState().forecast!.temperature_min[i]}°C - {weatherState().forecast!.temperature_max[
 					i
 				]}°C
@@ -38,7 +44,13 @@
 		min-height: 80px;
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		gap: 0.5rem;
+	}
+
+	.weather-icon {
+		width: 48px;
+		height: 48px;
 	}
 
 	h2 {
