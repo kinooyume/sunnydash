@@ -1,11 +1,13 @@
 {
-  "name": "sunnydash",
-  "private": true,
-  "version": "0.0.1",
-  "type": "module",
+	"name": "sunnydash",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
+		"dev:mock": "VITE_USE_MOCK=true vite dev",
 		"build": "vite build",
+		"build:mock": "VITE_USE_MOCK=true vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",

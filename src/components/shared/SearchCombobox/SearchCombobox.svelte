@@ -46,7 +46,6 @@
 		]
 	]);
 
-	// NOTE: Asuming that focusedItemIndex is not null
 	const focusedItemKeyPressedActions: KeyPressedActions = new Map([
 		[
 			'ArrowDown',
@@ -69,8 +68,6 @@
 		]
 	]);
 
-	// debounce handleKey
-	//
 	function debounce(func: Function, delay: number) {
 		let timeout: NodeJS.Timeout;
 		return (...args: any[]) => {
@@ -100,8 +97,6 @@
 		onSelect?.(item);
 	}
 
-	// unfocus on click
-
 	let inputRef: HTMLInputElement;
 
 	function handleUnfocus() {
@@ -110,12 +105,7 @@
 	}
 </script>
 
-<div
-	class="combo"
-	role="presentation"
-	onfocusout={handleUnfocus}
-	aria-label="Search Combobox"
->
+<div class="combo" role="presentation" onfocusout={handleUnfocus} aria-label="Search Combobox">
 	<input
 		type="text"
 		bind:value={inputValue}
@@ -149,21 +139,24 @@
 <style>
 	.combo {
 		position: relative;
-		width: 800px;
+		width: 580px;
 		max-width: 100%;
 	}
 
 	input {
 		width: 100%;
-		padding: 0.875rem 1.25rem;
-		font-size: 1rem;
-		border: 1px solid var(--border);
-		border-radius: 16px;
+		height: 54px;
+		padding: 0 24px;
+		font-size: 16px;
+		border: 1px solid var(--glass-border);
+		border-radius: var(--radius-full);
 		outline: none;
 		transition: all 0.2s ease;
-		background: var(--background);
+		background: var(--glass);
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
 		color: var(--text);
-		box-shadow: none;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 	}
 
 	input::placeholder {
@@ -172,46 +165,48 @@
 	}
 
 	input:focus {
-		border-color: var(--accent);
-		box-shadow: 0 0 0 3px rgba(248, 186, 136, 0.12);
+		background: var(--glass-hover);
+		border-color: var(--border-hover);
+		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 	}
 
 	ul {
 		position: absolute;
-		z-index: 10;
-		background: linear-gradient(180deg, var(--surface) 0%, #1a2a3d 100%);
-		border: 1px solid var(--border);
-		border-radius: 16px;
+		z-index: 100;
+		background: rgba(28, 38, 56, 0.95);
+		backdrop-filter: blur(24px);
+		-webkit-backdrop-filter: blur(24px);
+		border: 1px solid var(--glass-border);
+		border-radius: var(--radius-md);
 		list-style: none;
-		margin: 0.5rem 0 0;
-		padding: 0.5rem;
+		margin: 12px 0 0;
+		padding: 8px;
 		width: 100%;
-		max-height: 360px;
+		max-height: 380px;
 		overflow-y: auto;
 		box-shadow:
 			0 4px 6px rgba(0, 0, 0, 0.1),
-			0 12px 24px rgba(0, 0, 0, 0.25);
+			0 20px 40px rgba(0, 0, 0, 0.3);
 	}
 
 	li {
-		padding: 0.625rem 0.875rem;
+		padding: 10px 14px;
 		cursor: pointer;
 		transition: all 0.15s ease;
 		color: var(--text);
-		border-radius: 10px;
+		border-radius: var(--radius-sm);
 		margin: 2px 0;
 	}
 
 	li:hover {
-		background: rgba(255, 255, 255, 0.05);
+		background: rgba(255, 255, 255, 0.06);
 	}
 
 	li.selected {
-		background: rgba(248, 186, 136, 0.1);
-		color: var(--accent);
+		background: rgba(248, 186, 136, 0.12);
 	}
 
 	li.selected:hover {
-		background: rgba(248, 186, 136, 0.15);
+		background: rgba(248, 186, 136, 0.16);
 	}
 </style>

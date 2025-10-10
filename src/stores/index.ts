@@ -1,4 +1,8 @@
-import { type WeatherDomainsState, WeatherDomainsStateStatus } from './weatherDomainsState.types';
+import {
+	type WeatherDomainsState,
+	WeatherDomainsStateStatus,
+	API_PROVIDERS
+} from './weatherDomainsState.types';
 import {
 	type WeatherState,
 	type WeatherStateStatus,
@@ -8,6 +12,7 @@ import {
 export {
 	type WeatherDomainsState,
 	WeatherDomainsStateStatus,
+	API_PROVIDERS,
 	WeatherStateStatusKind,
 	type WeatherState,
 	type WeatherStateStatus

@@ -6,9 +6,7 @@
 	setContext('weather-domains', () => weatherDomains);
 	setContext('weather-state', () => weatherState);
 
-  let {children} = $props();
+	let { children } = $props();
 </script>
 
 {@render children()}
-
-
