@@ -6,8 +6,10 @@
 	import { switchProvider } from '../stores/weatherDomainsState.svelte';
 	import type { WeatherDomainsState } from '../stores';
 	import type { Context } from '../services/context';
+	import type { TemperatureUnitContext } from '../services/context/context.types';
 
 	const weatherDomains = getContext<Context<WeatherDomainsState>>('weather-domains');
+	const tempUnit = getContext<Context<TemperatureUnitContext>>('temperature-unit');
 
 	const today = new Date().toLocaleDateString('en-US', {
 		weekday: 'long',
@@ -36,7 +38,7 @@
 	</div>
 	<div class="header-right">
 		<Select options={apiOptions} value={selectedApi} label="API" onchange={handleApiChange} />
-		<IconButton label="Toggle temperature unit" size="sm">°C</IconButton>
+		<IconButton label="Toggle temperature unit" size="sm" onclick={() => tempUnit().toggleUnit()}>°{tempUnit().unit}</IconButton>
 	</div>
 </header>
 

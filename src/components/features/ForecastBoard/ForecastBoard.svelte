@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 	import type { WeatherState } from '../../../stores';
-	import type { Context } from '../../../services/context';
+	import type { Context, TemperatureUnitContext } from '../../../services/context';
 	import { getWeatherIconPath, getWeatherDescription } from '../../../domain';
 	import { GlassCard, Text } from '../../ui';
 
 	let weatherState = getContext<Context<WeatherState>>('weather-state');
+	let tempUnit = getContext<Context<TemperatureUnitContext>>('temperature-unit');
 
 	let forecast = $derived(weatherState().forecast);
 	let todayCode = $derived(forecast?.weather_code[0] ?? 0);
@@ -19,7 +20,7 @@
 	}
 
 	function avgTemp(min: number, max: number): number {
-		return Math.round((min + max) / 2);
+		return tempUnit().convertTemp(Math.round((min + max) / 2));
 	}
 </script>
 
@@ -40,7 +41,7 @@
 						</div>
 						<Text as="p" variant="subtitle" color="muted">{getWeatherDescription(todayCode)}</Text>
 						<Text as="p" variant="caption" color="muted"
-							>H:{Math.round(todayMax)}° L:{Math.round(todayMin)}°</Text
+							>H:{tempUnit().convertTemp(Math.round(todayMax))}° L:{tempUnit().convertTemp(Math.round(todayMin))}°</Text
 						>
 					</div>
 					<div class="hero-right">
