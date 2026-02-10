@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Header from '../app/Header.svelte';
+	import { Toast } from '../components/ui';
 	import WeatherContext from '../services/context/WeatherContext.svelte';
 
 	let { children } = $props();
@@ -43,6 +44,7 @@
 		<main class="container">
 			{@render children()}
 		</main>
+		<Toast />
 	</div>
 </WeatherContext>
 

@@ -4,7 +4,7 @@
 	import { SearchCombobox } from '../../shared/SearchCombobox';
 	import { CitySearchItem, type CityItem } from './City';
 	import type { SearchComboboxCitiesProps } from './CitySearch.types';
-	import type { Context } from '../../../services/context';
+	import type { Context, NotificationContext } from '../../../services/context';
 	import WeatherDomainsState from '../../../stores/weatherDomainsState.svelte';
 	import WeatherState from '../../../stores/weatherState.svelte';
 	import type { City } from '../../../domain';
@@ -18,6 +18,7 @@
 
 	let weatherDomains = getContext<Context<WeatherDomainsState>>('weather-domains');
 	let weatherState = getContext<Context<WeatherState>>('weather-state');
+	let notification = getContext<Context<NotificationContext>>('notification');
 
 	let inputValue = $state('');
 
@@ -57,12 +58,12 @@
 			weatherState().country = loc.country;
 			weatherState().forecast = forecast;
 			weatherState().status = { kind: WeatherStateStatusKind.OK };
-		} catch (err) {
+		} catch {
 			weatherState().status = {
 				kind: WeatherStateStatusKind.ERROR,
 				error: 'Failed to load weather data'
 			};
-			console.error(err);
+			notification().show('Failed to load weather data', 'error');
 		}
 	};
 
@@ -90,8 +91,8 @@
 						country_code: city.country_code
 					}))
 				: [];
-		} catch (error) {
-			console.error('Error searching cities:', error);
+		} catch {
+			notification().show('Error searching cities', 'error');
 			return [];
 		}
 	};

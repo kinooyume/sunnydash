@@ -8,3 +8,4 @@ export { type Coordinates, type WeatherForecast, type WeatherServicePort } from 
 export { getWeatherIconPath, getWeatherDescription } from './weatherIcon';
 export { type StoragePort } from './storage';
 export { type GeolocationPort } from './geolocation';
+export { type NotificationKind, type NotificationPort } from './notification';

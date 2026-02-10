@@ -9,3 +9,4 @@ export {
 	WeatherStateStatusKind
 } from './weatherState.types';
 export { type TemperatureUnit } from './temperatureUnit.types';
+export { type Notification } from './notificationState.types';

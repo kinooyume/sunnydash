@@ -8,13 +8,15 @@
 	import type {
 		Context,
 		TemperatureUnitContext,
-		GeolocationContext
+		GeolocationContext,
+		NotificationContext
 	} from '../services/context';
 
 	const weatherDomains = getContext<Context<WeatherDomainsState>>('weather-domains');
 	const weatherState = getContext<Context<WeatherState>>('weather-state');
 	const tempUnit = getContext<Context<TemperatureUnitContext>>('temperature-unit');
 	const geolocation = getContext<Context<GeolocationContext>>('geolocation');
+	const notification = getContext<Context<NotificationContext>>('notification');
 
 	const today = new Date().toLocaleDateString('en-US', {
 		weekday: 'long',
@@ -35,7 +37,10 @@
 
 	async function handleLocate() {
 		const coords = await geolocation().getCurrentPosition();
-		if (!coords) return;
+		if (!coords) {
+			notification().show('Could not get your location', 'error');
+			return;
+		}
 		weatherState().status = { kind: WeatherStateStatusKind.LOADING };
 		try {
 			const forecast = await weatherDomains().weather.getForecast(coords);
@@ -44,6 +49,7 @@
 			weatherState().forecast = forecast;
 			weatherState().status = { kind: WeatherStateStatusKind.OK };
 		} catch {
+			notification().show('Failed to load weather data', 'error');
 			weatherState().status = { kind: WeatherStateStatusKind.INITIAL };
 		}
 	}

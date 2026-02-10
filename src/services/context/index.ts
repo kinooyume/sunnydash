@@ -3,5 +3,6 @@ export {
 	type Context,
 	type TemperatureUnitContext,
 	type StorageContext,
-	type GeolocationContext
+	type GeolocationContext,
+	type NotificationContext
 } from './context.types';
