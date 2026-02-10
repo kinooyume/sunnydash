@@ -1,9 +1,10 @@
 <script module lang="ts">
-	import { type WeatherDomainsState, WeatherDomainsStateStatus } from '.';
+	import { type WeatherDomainsState, WeatherDomainsStateStatus, WeatherStateStatusKind } from '.';
 	import { openMeteoGeocodingAdapter, openMeteoWeatherAdapter } from '../adapters/openMeteo';
 	import { mockGeocodingAdapter, mockWeatherAdapter } from '../adapters/mock';
 	import { createWeatherAppService } from '../services';
 	import type { GeocodingPort, WeatherServicePort } from '../domain';
+	import { weatherState } from './weatherState.svelte';
 
 	const adapters: Record<
 		WeatherDomainsStateStatus,
@@ -42,5 +43,9 @@
 			geo: selected.geocoding,
 			weather: selected.weather
 		});
+		weatherState.status = { kind: WeatherStateStatusKind.INITIAL };
+		weatherState.city = undefined;
+		weatherState.country = undefined;
+		weatherState.forecast = undefined;
 	}
 </script>

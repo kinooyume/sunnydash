@@ -19,6 +19,15 @@
 	let weatherDomains = getContext<Context<WeatherDomainsState>>('weather-domains');
 	let weatherState = getContext<Context<WeatherState>>('weather-state');
 
+	let inputValue = $state('');
+
+	$effect(() => {
+		if (weatherState().status.kind === WeatherStateStatusKind.INITIAL) {
+			inputValue = '';
+			items = [];
+		}
+	});
+
 	const loadWeather = async (cityName: string) => {
 		showList = false;
 		if (cityName === '') {
@@ -88,7 +97,7 @@
 	};
 </script>
 
-<SearchCombobox bind:items {placeholder} {onSelect} {onPressEnter} {onKeyDown}>
+<SearchCombobox bind:items bind:inputValue {placeholder} {onSelect} {onPressEnter} {onKeyDown}>
 	{#snippet children(item)}
 		<CitySearchItem item={item as CityItem} />
 	{/snippet}
