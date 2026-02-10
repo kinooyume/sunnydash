@@ -2,12 +2,22 @@
 	import type { SearchComboboxCityProps } from './CitySearchItem.types';
 
 	let { item }: SearchComboboxCityProps = $props();
+
+	function countryCodeToFlag(code: string): string {
+		return code
+			.toUpperCase()
+			.split('')
+			.map((char) => String.fromCodePoint(127397 + char.charCodeAt(0)))
+			.join('');
+	}
 </script>
 
 <div class="city">
-	<div class="city__name">{item.name}</div>
-	<div class="city__country">{item.country}</div>
-	<div class="city__state">{item.state}</div>
+	<span class="city__flag">{countryCodeToFlag(item.country_code)}</span>
+	<div class="city__info">
+		<span class="city__name">{item.name}</span>
+		<span class="city__country">{item.country}</span>
+	</div>
 </div>
 
 <style>
@@ -15,26 +25,32 @@
 		display: flex;
 		width: 100%;
 		align-items: center;
-		gap: 8px;
-		padding: 1rem;
-		border-radius: 8px;
-		background: #fff;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-		border: 1px solid #ececec;
-		gap: 0.25rem;
+		gap: 0.75rem;
+		padding: 0.25rem 0;
+	}
+
+	.city__flag {
+		font-size: 1.25rem;
+		line-height: 1;
+	}
+
+	.city__info {
+		display: flex;
+		flex-direction: column;
+		gap: 0.125rem;
 	}
 
 	.city__name {
-		font-weight: 600;
-		font-size: 1.05rem;
-		color: #222;
-		margin-bottom: 0.25rem;
+		font-weight: 500;
+		font-size: 0.95rem;
+		color: var(--text-light);
+		line-height: 1.2;
 	}
 
-	.city__country,
-	.city__state {
-		color: #666;
-		font-size: 0.98rem;
-		margin-bottom: 0.1rem;
+	.city__country {
+		font-size: 0.8rem;
+		color: var(--accent-secondary);
+		opacity: 0.8;
+		line-height: 1.2;
 	}
 </style>

@@ -1,1 +1,1 @@
-export type Context<T> = () => T
+export type Context<T> = () => T;
