@@ -2,16 +2,6 @@ import type { City } from '../../domain/geocoding';
 import type { WeatherForecast } from '../../domain/weather';
 
 export const mockCities: Record<string, City[]> = {
-	paris: [
-		{ name: 'Paris', latitude: 48.8566, longitude: 2.3522, country: 'France', country_code: 'FR' },
-		{
-			name: 'Paris',
-			latitude: 33.6609,
-			longitude: -95.5555,
-			country: 'United States',
-			country_code: 'US'
-		}
-	],
 	london: [
 		{
 			name: 'London',
@@ -25,34 +15,38 @@ export const mockCities: Record<string, City[]> = {
 	tokyo: [
 		{ name: 'Tokyo', latitude: 35.6762, longitude: 139.6503, country: 'Japan', country_code: 'JP' }
 	],
-	sydney: [
+	reykjavik: [
 		{
-			name: 'Sydney',
-			latitude: -33.8688,
-			longitude: 151.2093,
-			country: 'Australia',
-			country_code: 'AU'
+			name: 'Reykjavik',
+			latitude: 64.1466,
+			longitude: -21.9426,
+			country: 'Iceland',
+			country_code: 'IS'
 		}
 	],
-	berlin: [
-		{ name: 'Berlin', latitude: 52.52, longitude: 13.405, country: 'Germany', country_code: 'DE' }
+	cairo: [
+		{ name: 'Cairo', latitude: 30.0444, longitude: 31.2357, country: 'Egypt', country_code: 'EG' }
 	],
-	madrid: [
-		{ name: 'Madrid', latitude: 40.4168, longitude: -3.7038, country: 'Spain', country_code: 'ES' }
+	mumbai: [
+		{ name: 'Mumbai', latitude: 19.076, longitude: 72.8777, country: 'India', country_code: 'IN' }
 	],
-	rome: [
-		{ name: 'Rome', latitude: 41.9028, longitude: 12.4964, country: 'Italy', country_code: 'IT' }
+	oslo: [
+		{ name: 'Oslo', latitude: 59.9139, longitude: 10.7522, country: 'Norway', country_code: 'NO' }
+	],
+	lima: [
+		{ name: 'Lima', latitude: -12.0464, longitude: -77.0428, country: 'Peru', country_code: 'PE' }
 	]
 };
 
-export function createMockForecast(baseTemp: number = 20): WeatherForecast {
+export function createMockForecast(
+	baseTemp: number = 20,
+	conditions: number[] = [0, 1, 2, 3, 61, 80, 95]
+): WeatherForecast {
 	const today = new Date();
 	const times: string[] = [];
 	const tempMin: number[] = [];
 	const tempMax: number[] = [];
 	const weatherCodes: number[] = [];
-
-	const conditions = [0, 1, 2, 3, 61, 80, 95]; // Various weather codes
 
 	for (let i = 0; i < 7; i++) {
 		const date = new Date(today);
@@ -74,11 +68,11 @@ export function createMockForecast(baseTemp: number = 20): WeatherForecast {
 }
 
 export const mockForecasts: Record<string, WeatherForecast> = {
-	paris: createMockForecast(18),
-	london: createMockForecast(14),
-	tokyo: createMockForecast(22),
-	sydney: createMockForecast(25),
-	berlin: createMockForecast(12),
-	madrid: createMockForecast(28),
-	rome: createMockForecast(24)
+	london: createMockForecast(14, [3, 61, 63, 2, 80, 61, 3]),
+	tokyo: createMockForecast(22, [0, 1, 2, 61, 0, 1, 95]),
+	reykjavik: createMockForecast(-2, [75, 71, 45, 3, 73, 85, 77]),
+	cairo: createMockForecast(35, [0, 0, 1, 0, 0, 1, 0]),
+	mumbai: createMockForecast(30, [61, 63, 95, 80, 65, 96, 61]),
+	oslo: createMockForecast(1, [71, 73, 3, 2, 75, 45, 71]),
+	lima: createMockForecast(18, [2, 45, 48, 2, 3, 1, 45])
 };
