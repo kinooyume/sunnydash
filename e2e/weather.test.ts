@@ -49,7 +49,7 @@ test.describe('Weather App', () => {
 
 	test.describe('City Search', () => {
 		test('shows dropdown when typing in search', async ({ page }) => {
-			await searchAndWait(page, 'Paris');
+			await searchAndWait(page, 'Cairo');
 		});
 
 		test('displays city results with flags', async ({ page }) => {
@@ -67,7 +67,7 @@ test.describe('Weather App', () => {
 		});
 
 		test('keyboard navigation works in dropdown', async ({ page }) => {
-			await searchAndWait(page, 'Berlin');
+			await searchAndWait(page, 'Oslo');
 
 			const searchInput = getSearchInput(page);
 			await searchInput.press('ArrowDown');
@@ -79,7 +79,7 @@ test.describe('Weather App', () => {
 
 	test.describe('Weather Display', () => {
 		test.beforeEach(async ({ page }) => {
-			await selectCity(page, 'Paris');
+			await selectCity(page, 'Tokyo');
 		});
 
 		test('displays hero card with temperature', async ({ page }) => {
@@ -139,11 +139,11 @@ test.describe('Weather App', () => {
 			const searchInput = getSearchInput(page);
 			await searchInput.fill('');
 			await page.waitForTimeout(100);
-			await searchInput.pressSequentially('Berlin', { delay: 50 });
+			await searchInput.pressSequentially('Mumbai', { delay: 50 });
 			await expect(getSearchListbox(page)).toBeVisible({ timeout: 15000 });
 			await getCityOptions(page).first().click();
 
-			await expect(heading).toContainText('Berlin', { timeout: 15000 });
+			await expect(heading).toContainText('Mumbai', { timeout: 15000 });
 		});
 	});
 
@@ -154,12 +154,12 @@ test.describe('Weather App', () => {
 			await expect(searchInput).toHaveAttribute('aria-autocomplete', 'list');
 			await expect(searchInput).toHaveAttribute('aria-expanded', 'false');
 
-			await searchAndWait(page, 'Madrid');
+			await searchAndWait(page, 'Lima');
 			await expect(searchInput).toHaveAttribute('aria-expanded', 'true');
 		});
 
 		test('dropdown options are keyboard accessible', async ({ page }) => {
-			await searchAndWait(page, 'Rome');
+			await searchAndWait(page, 'Reykjavik');
 
 			const options = getCityOptions(page);
 			await expect(options.first()).toHaveAttribute('aria-selected');

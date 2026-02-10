@@ -2,13 +2,13 @@ import type { Coordinates, WeatherForecast, WeatherServicePort } from '../../dom
 import { mockForecasts, createMockForecast } from './mockData';
 
 const coordsToCity: Record<string, string> = {
-	'48.86_2.35': 'paris',
 	'51.51_-0.13': 'london',
 	'35.68_139.65': 'tokyo',
-	'-33.87_151.21': 'sydney',
-	'52.52_13.41': 'berlin',
-	'40.42_-3.70': 'madrid',
-	'41.90_12.50': 'rome'
+	'64.15_-21.94': 'reykjavik',
+	'30.04_31.24': 'cairo',
+	'19.08_72.88': 'mumbai',
+	'59.91_10.75': 'oslo',
+	'-12.05_-77.04': 'lima'
 };
 
 function getCityFromCoords(coords: Coordinates): string | null {

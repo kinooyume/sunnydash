@@ -6,7 +6,6 @@ export interface City {
 	country_code: string;
 }
 
-// add props name + count
 export interface GeocodingProps {
 	name: string;
 	count?: number;
