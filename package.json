@@ -1,5 +1,6 @@
 {
 	"name": "sunnydash",
+	"description": "Weather dashboard with hexagonal architecture",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
