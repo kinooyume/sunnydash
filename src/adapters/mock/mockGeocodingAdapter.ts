@@ -1,4 +1,4 @@
-import type { City, GeocodingPort, GeocodingProps } from '../../domain/geocoding';
+import type { City, GeocodingPort, GeocodingProps } from '../../domain';
 import { mockCities } from './mockData';
 
 export const mockGeocodingAdapter: GeocodingPort = {

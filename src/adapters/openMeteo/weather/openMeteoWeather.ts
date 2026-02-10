@@ -1,4 +1,4 @@
-import type { Coordinates, WeatherForecast, WeatherServicePort } from '../../../domain/weather';
+import type { Coordinates, WeatherForecast, WeatherServicePort } from '../../../domain';
 
 export const openMeteoWeatherAdapter: WeatherServicePort = {
 	getForecast: async ({ latitude, longitude }: Coordinates): Promise<WeatherForecast> => {

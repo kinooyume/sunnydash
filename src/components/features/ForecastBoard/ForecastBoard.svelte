@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 	import type { WeatherState } from '../../../stores';
-	import type { Context } from '../../../services/context/context.types';
-	import { getWeatherIconPath, getWeatherDescription } from '../../../domain/weatherIcon';
+	import type { Context } from '../../../services/context';
+	import { getWeatherIconPath, getWeatherDescription } from '../../../domain';
 	import { GlassCard, Text } from '../../ui';
 
 	let weatherState = getContext<Context<WeatherState>>('weather-state');
@@ -56,7 +56,7 @@
 			<section class="forecast-strip">
 				<Text as="h3" variant="overline" color="muted" class="section-title">7-Day Forecast</Text>
 				<div class="forecast-scroll">
-					{#each forecast.time as date, i}
+					{#each forecast.time as date, i (date)}
 						<GlassCard
 							padding="sm"
 							radius="md"

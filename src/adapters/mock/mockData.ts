@@ -1,5 +1,4 @@
-import type { City } from '../../domain/geocoding';
-import type { WeatherForecast } from '../../domain/weather';
+import type { City, WeatherForecast } from '../../domain';
 
 export const mockCities: Record<string, City[]> = {
 	paris: [

@@ -30,7 +30,6 @@
 		font-weight: 500;
 	}
 
-	/* Sizes */
 	.size-sm {
 		width: 32px;
 		height: 32px;
@@ -52,7 +51,6 @@
 		border-radius: var(--radius-sm);
 	}
 
-	/* Variants */
 	.ghost {
 		background: transparent;
 	}

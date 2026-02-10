@@ -2,7 +2,7 @@ import type { Snippet } from 'svelte';
 
 export type KeyPressedActions = Map<string, () => void>;
 
-export type BaseItem = Record<string, any> & {
+export type BaseItem = Record<string, unknown> & {
 	id: number;
 	name: string;
 };

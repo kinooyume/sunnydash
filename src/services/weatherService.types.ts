@@ -1,5 +1,4 @@
-import type { GeocodingPort } from '../domain/geocoding';
-import type { WeatherForecast, WeatherServicePort } from '../domain/weather';
+import type { GeocodingPort, WeatherForecast, WeatherServicePort } from '../domain';
 
 export type CreateWeatherAppServiceProps = {
 	geo: GeocodingPort;

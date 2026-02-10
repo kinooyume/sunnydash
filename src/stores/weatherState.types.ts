@@ -1,4 +1,4 @@
-import type { WeatherForecast } from '../domain/weather';
+import type { WeatherForecast } from '../domain';
 
 export enum WeatherStateStatusKind {
 	INITIAL = 'initial',

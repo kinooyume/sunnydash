@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import CitySearch from '../components/features/CitySearch/CitySearch.svelte';
+	import { CitySearch } from '../components/features/CitySearch';
 	import { Text, IconButton, Select } from '../components/ui';
 	import { API_PROVIDERS, WeatherDomainsStateStatus } from '../stores';
 	import { switchProvider } from '../stores/weatherDomainsState.svelte';
 	import type { WeatherDomainsState } from '../stores';
-	import type { Context } from '../services/context/context.types';
+	import type { Context } from '../services/context';
 
 	const weatherDomains = getContext<Context<WeatherDomainsState>>('weather-domains');
 

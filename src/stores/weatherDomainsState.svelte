@@ -2,9 +2,8 @@
 	import { type WeatherDomainsState, WeatherDomainsStateStatus } from '.';
 	import { openMeteoGeocodingAdapter, openMeteoWeatherAdapter } from '../adapters/openMeteo';
 	import { mockGeocodingAdapter, mockWeatherAdapter } from '../adapters/mock';
-	import { createWeatherAppService } from '../services/weatherService';
-	import type { GeocodingPort } from '../domain/geocoding';
-	import type { WeatherServicePort } from '../domain/weather';
+	import { createWeatherAppService } from '../services';
+	import type { GeocodingPort, WeatherServicePort } from '../domain';
 
 	const adapters: Record<
 		WeatherDomainsStateStatus,

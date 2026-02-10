@@ -1,6 +1,5 @@
-import type { GeocodingPort } from '../domain/geocoding';
-import type { WeatherServicePort } from '../domain/weather';
-import type { WeatherAppService } from '../services/weatherService.types';
+import type { GeocodingPort, WeatherServicePort } from '../domain';
+import type { WeatherAppService } from '../services';
 
 export enum WeatherDomainsStateStatus {
 	OPEN_METEO = 'openMeteo',

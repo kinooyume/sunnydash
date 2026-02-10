@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 	import { WeatherStateStatusKind } from '../../../stores';
-	import SearchCombobox from '../../shared/SearchCombobox/SearchCombobox.svelte';
-	import CitySearchItem from './City/CitySearchItem.svelte';
-	import type { CityItem } from './City/CitySearchItem.types';
+	import { SearchCombobox } from '../../shared/SearchCombobox';
+	import { CitySearchItem, type CityItem } from './City';
 	import type { SearchComboboxCitiesProps } from './CitySearch.types';
-	import type { Context } from '../../../services/context/context.types';
+	import type { Context } from '../../../services/context';
 	import WeatherDomainsState from '../../../stores/weatherDomainsState.svelte';
 	import WeatherState from '../../../stores/weatherState.svelte';
-	import type { City, GeocodingPort } from '../../../domain/geocoding';
+	import type { City } from '../../../domain';
 
 	let {
 		items = $bindable([]),
@@ -51,7 +50,6 @@
 				error: 'Failed to load weather data'
 			};
 			console.error(err);
-		} finally {
 		}
 	};
 
