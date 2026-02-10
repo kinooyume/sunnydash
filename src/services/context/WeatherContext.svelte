@@ -4,6 +4,7 @@
 	import { weatherState } from '../../stores/weatherState.svelte';
 	import { temperatureUnit, toggleUnit, convertTemp } from '../../stores/temperatureUnit.svelte';
 	import { localStorageAdapter } from '../../adapters/storage';
+	import { browserGeolocationAdapter } from '../../adapters/geolocation';
 
 	const stored = localStorageAdapter.get('temperature-unit');
 	if (stored === 'F') temperatureUnit.value = 'F';
@@ -19,6 +20,7 @@
 		convertTemp
 	}));
 	setContext('storage', () => localStorageAdapter);
+	setContext('geolocation', () => browserGeolocationAdapter);
 
 	let { children } = $props();
 </script>

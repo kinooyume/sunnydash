@@ -1,0 +1,1 @@
+export { browserGeolocationAdapter } from './browserGeolocationAdapter';

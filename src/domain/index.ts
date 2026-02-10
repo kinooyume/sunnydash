@@ -7,3 +7,4 @@ export {
 export { type Coordinates, type WeatherForecast, type WeatherServicePort } from './weather';
 export { getWeatherIconPath, getWeatherDescription } from './weatherIcon';
 export { type StoragePort } from './storage';
+export { type GeolocationPort } from './geolocation';

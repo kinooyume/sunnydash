@@ -22,9 +22,13 @@
 	let inputValue = $state('');
 
 	$effect(() => {
-		if (weatherState().status.kind === WeatherStateStatusKind.INITIAL) {
+		const state = weatherState();
+		if (state.status.kind === WeatherStateStatusKind.INITIAL) {
 			inputValue = '';
 			items = [];
+		} else if (state.status.kind === WeatherStateStatusKind.OK && state.city) {
+			inputValue = state.city;
+			showList = false;
 		}
 	});
 

@@ -2,14 +2,19 @@
 	import { getContext } from 'svelte';
 	import { CitySearch } from '../components/features/CitySearch';
 	import { Text, IconButton, Select } from '../components/ui';
-	import { API_PROVIDERS, WeatherDomainsStateStatus } from '../stores';
+	import { API_PROVIDERS, WeatherDomainsStateStatus, WeatherStateStatusKind } from '../stores';
 	import { switchProvider } from '../stores/weatherDomainsState.svelte';
-	import type { WeatherDomainsState } from '../stores';
-	import type { Context } from '../services/context';
-	import type { TemperatureUnitContext } from '../services/context/context.types';
+	import type { WeatherDomainsState, WeatherState } from '../stores';
+	import type {
+		Context,
+		TemperatureUnitContext,
+		GeolocationContext
+	} from '../services/context';
 
 	const weatherDomains = getContext<Context<WeatherDomainsState>>('weather-domains');
+	const weatherState = getContext<Context<WeatherState>>('weather-state');
 	const tempUnit = getContext<Context<TemperatureUnitContext>>('temperature-unit');
+	const geolocation = getContext<Context<GeolocationContext>>('geolocation');
 
 	const today = new Date().toLocaleDateString('en-US', {
 		weekday: 'long',
@@ -26,6 +31,21 @@
 
 	function handleApiChange(value: string) {
 		switchProvider(value as WeatherDomainsStateStatus);
+	}
+
+	async function handleLocate() {
+		const coords = await geolocation().getCurrentPosition();
+		if (!coords) return;
+		weatherState().status = { kind: WeatherStateStatusKind.LOADING };
+		try {
+			const forecast = await weatherDomains().weather.getForecast(coords);
+			weatherState().city = 'Current Location';
+			weatherState().country = '';
+			weatherState().forecast = forecast;
+			weatherState().status = { kind: WeatherStateStatusKind.OK };
+		} catch {
+			weatherState().status = { kind: WeatherStateStatusKind.INITIAL };
+		}
 	}
 </script>
 
@@ -44,6 +64,15 @@
 
 <section class="search-hero">
 	<CitySearch placeholder="Search for a city..." />
+	<IconButton label="Use my location" size="md" onclick={handleLocate}>
+		<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<circle cx="12" cy="12" r="4" />
+			<line x1="12" y1="2" x2="12" y2="6" />
+			<line x1="12" y1="18" x2="12" y2="22" />
+			<line x1="2" y1="12" x2="6" y2="12" />
+			<line x1="18" y1="12" x2="22" y2="12" />
+		</svg>
+	</IconButton>
 </section>
 
 <style>
@@ -79,6 +108,8 @@
 	.search-hero {
 		display: flex;
 		justify-content: center;
+		align-items: center;
+		gap: 12px;
 		padding: 32px 24px 0;
 	}
 </style>
