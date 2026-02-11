@@ -1,7 +1,7 @@
 export {
-	type WeatherDomainsState,
-	WeatherDomainsStateStatus,
-	API_PROVIDERS
+	type AdapterEntry,
+	type AdapterRegistry,
+	type WeatherDomainsState
 } from './weatherDomainsState.types';
 export {
 	type WeatherState,

@@ -2,8 +2,15 @@
 	import { getContext } from 'svelte';
 	import { CitySearch } from '../components/features/CitySearch';
 	import { Text, IconButton, Select } from '../components/ui';
-	import { API_PROVIDERS, WeatherDomainsStateStatus, WeatherStateStatusKind } from '../stores';
-	import { switchProvider } from '../stores/weatherDomainsState.svelte';
+	import { WeatherStateStatusKind } from '../stores';
+	import {
+		WEATHER_ADAPTERS,
+		GEOCODING_ADAPTERS,
+		REVERSE_GEOCODING_ADAPTERS,
+		switchWeather,
+		switchGeocoding,
+		switchReverseGeocoding
+	} from '../stores/weatherDomainsState.svelte';
 	import type { WeatherDomainsState, WeatherState } from '../stores';
 	import type {
 		Context,
@@ -24,16 +31,13 @@
 		day: 'numeric'
 	});
 
-	const apiOptions = Object.entries(API_PROVIDERS).map(([value, { label }]) => ({
-		value,
-		label
-	}));
-
-	let selectedApi = $derived(weatherDomains().status);
-
-	function handleApiChange(value: string) {
-		switchProvider(value as WeatherDomainsStateStatus);
+	function toOptions(registry: Record<string, { label: string }>) {
+		return Object.entries(registry).map(([value, { label }]) => ({ value, label }));
 	}
+
+	const weatherOptions = toOptions(WEATHER_ADAPTERS);
+	const geocodingOptions = toOptions(GEOCODING_ADAPTERS);
+	const reverseGeocodingOptions = toOptions(REVERSE_GEOCODING_ADAPTERS);
 
 	async function handleLocate() {
 		const coords = await geolocation().getCurrentPosition();
@@ -66,7 +70,9 @@
 		<Text variant="caption" color="muted">{today}</Text>
 	</div>
 	<div class="header-right">
-		<Select options={apiOptions} value={selectedApi} label="API" onchange={handleApiChange} />
+		<Select options={weatherOptions} value={weatherDomains().weatherKey} label="Weather" onchange={switchWeather} />
+		<Select options={geocodingOptions} value={weatherDomains().geocodingKey} label="Search" onchange={switchGeocoding} />
+		<Select options={reverseGeocodingOptions} value={weatherDomains().reverseGeocodingKey} label="Reverse" onchange={switchReverseGeocoding} />
 		<IconButton label="Toggle temperature unit" size="sm" onclick={() => tempUnit().toggleUnit()}>°{tempUnit().unit}</IconButton>
 	</div>
 </header>

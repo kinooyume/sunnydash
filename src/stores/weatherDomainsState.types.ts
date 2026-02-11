@@ -1,26 +1,15 @@
 import type { GeocodingPort, ReverseGeocodingPort, WeatherServicePort } from '../domain';
 import type { WeatherAppService } from '../services';
 
-export enum WeatherDomainsStateStatus {
-	OPEN_METEO = 'openMeteo',
-	MOCK = 'mock'
-}
-
-export const API_PROVIDERS = {
-	[WeatherDomainsStateStatus.OPEN_METEO]: {
-		label: 'Open-Meteo',
-		description: 'Free weather API'
-	},
-	[WeatherDomainsStateStatus.MOCK]: {
-		label: 'Mock API',
-		description: 'Local mock data'
-	}
-} as const;
+export type AdapterEntry<T> = { label: string; adapter: T };
+export type AdapterRegistry<T> = Record<string, AdapterEntry<T>>;
 
 export type WeatherDomainsState = {
-	status: WeatherDomainsStateStatus;
+	weatherKey: string;
+	geocodingKey: string;
+	reverseGeocodingKey: string;
+	weather: WeatherServicePort;
 	geocoding: GeocodingPort;
 	reverseGeocoding: ReverseGeocodingPort;
-	weather: WeatherServicePort;
 	services: WeatherAppService;
 };
