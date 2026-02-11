@@ -1,21 +1,24 @@
 <script module lang="ts">
 	import { type WeatherDomainsState, WeatherDomainsStateStatus, WeatherStateStatusKind } from '.';
 	import { openMeteoGeocodingAdapter, openMeteoWeatherAdapter } from '../adapters/openMeteo';
-	import { mockGeocodingAdapter, mockWeatherAdapter } from '../adapters/mock';
+	import { mockGeocodingAdapter, mockReverseGeocodingAdapter, mockWeatherAdapter } from '../adapters/mock';
+	import { nominatimReverseGeocodingAdapter } from '../adapters/nominatim';
 	import { createWeatherAppService } from '../services';
-	import type { GeocodingPort, WeatherServicePort } from '../domain';
+	import type { GeocodingPort, ReverseGeocodingPort, WeatherServicePort } from '../domain';
 	import { weatherState } from './weatherState.svelte';
 
 	const adapters: Record<
 		WeatherDomainsStateStatus,
-		{ geocoding: GeocodingPort; weather: WeatherServicePort }
+		{ geocoding: GeocodingPort; reverseGeocoding: ReverseGeocodingPort; weather: WeatherServicePort }
 	> = {
 		[WeatherDomainsStateStatus.OPEN_METEO]: {
 			geocoding: openMeteoGeocodingAdapter,
+			reverseGeocoding: nominatimReverseGeocodingAdapter,
 			weather: openMeteoWeatherAdapter
 		},
 		[WeatherDomainsStateStatus.MOCK]: {
 			geocoding: mockGeocodingAdapter,
+			reverseGeocoding: mockReverseGeocodingAdapter,
 			weather: mockWeatherAdapter
 		}
 	};
@@ -30,6 +33,7 @@
 	export const weatherDomains = $state<WeatherDomainsState>({
 		status: initialStatus,
 		geocoding: initial.geocoding,
+		reverseGeocoding: initial.reverseGeocoding,
 		weather: initial.weather,
 		services: createWeatherAppService({ geo: initial.geocoding, weather: initial.weather })
 	});
@@ -38,6 +42,7 @@
 		const selected = adapters[status];
 		weatherDomains.status = status;
 		weatherDomains.geocoding = selected.geocoding;
+		weatherDomains.reverseGeocoding = selected.reverseGeocoding;
 		weatherDomains.weather = selected.weather;
 		weatherDomains.services = createWeatherAppService({
 			geo: selected.geocoding,

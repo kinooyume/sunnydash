@@ -43,9 +43,12 @@
 		}
 		weatherState().status = { kind: WeatherStateStatusKind.LOADING };
 		try {
-			const forecast = await weatherDomains().weather.getForecast(coords);
-			weatherState().city = 'Current Location';
-			weatherState().country = '';
+			const [city, forecast] = await Promise.all([
+				weatherDomains().reverseGeocoding.reverseGeocode(coords),
+				weatherDomains().weather.getForecast(coords)
+			]);
+			weatherState().city = city?.name ?? 'Current Location';
+			weatherState().country = city?.country ?? '';
 			weatherState().forecast = forecast;
 			weatherState().status = { kind: WeatherStateStatusKind.OK };
 		} catch {

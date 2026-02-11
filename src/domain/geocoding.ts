@@ -16,6 +16,10 @@ export interface GeocodingPort {
 	searchCity(props: GeocodingProps): Promise<City | null>;
 }
 
+export interface ReverseGeocodingPort {
+	reverseGeocode(coords: { latitude: number; longitude: number }): Promise<City | null>;
+}
+
 export function createEmptyGeocodingPort(): GeocodingPort {
 	return {
 		searchCities: async () => null,

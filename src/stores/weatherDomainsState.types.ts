@@ -1,4 +1,4 @@
-import type { GeocodingPort, WeatherServicePort } from '../domain';
+import type { GeocodingPort, ReverseGeocodingPort, WeatherServicePort } from '../domain';
 import type { WeatherAppService } from '../services';
 
 export enum WeatherDomainsStateStatus {
@@ -20,6 +20,7 @@ export const API_PROVIDERS = {
 export type WeatherDomainsState = {
 	status: WeatherDomainsStateStatus;
 	geocoding: GeocodingPort;
+	reverseGeocoding: ReverseGeocodingPort;
 	weather: WeatherServicePort;
 	services: WeatherAppService;
 };

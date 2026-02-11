@@ -2,6 +2,7 @@ export {
 	type City,
 	type GeocodingProps,
 	type GeocodingPort,
+	type ReverseGeocodingPort,
 	createEmptyGeocodingPort
 } from './geocoding';
 export { type Coordinates, type WeatherForecast, type WeatherServicePort } from './weather';

@@ -1,0 +1,1 @@
+export { nominatimReverseGeocodingAdapter } from './nominatimReverseGeocodingAdapter';
