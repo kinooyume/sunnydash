@@ -32,7 +32,7 @@ Hexagonal architecture with ports & adapters:
 ```
 src/
 ├── domain/          # Core types, weather mappings
-├── adapters/        # API implementations (OpenMeteo, Mock)
+├── adapters/        # API implementations (OpenMeteo, Nominatim, Mock...)
 ├── services/        # Application services
 ├── stores/          # Svelte state management
 ├── components/
@@ -41,6 +41,23 @@ src/
 │   └── shared/      # Shared components (SearchCombobox...)
 └── app/             # Page layouts
 ```
+
+### Ports
+
+The domain layer defines interfaces (ports) that abstract external dependencies. Business logic never touches infrastructure directly.
+
+| Port | What it abstracts | Adapter(s) |
+| --- | --- | --- |
+| `WeatherServicePort` | Weather forecast API | OpenMeteo, Mock |
+| `GeocodingPort` | City search (forward) | OpenMeteo, Mock |
+| `ReverseGeocodingPort` | Coords to city name | Nominatim (OpenStreetMap), Mock |
+| `StoragePort` | Key-value persistence | localStorage |
+| `GeolocationPort` | Device location | Browser Geolocation API |
+| `NotificationPort` | User-facing messages | Store-backed toasts |
+
+Weather, geocoding, and reverse geocoding adapters can each be switched independently from the UI. The other three are standalone infrastructure ports backed by browser APIs.
+
+All ports are provided to components through Svelte's context API, so nothing imports an adapter directly.
 
 ### Adding a new weather API
 
