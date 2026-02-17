@@ -5,9 +5,10 @@
 	import { CitySearchItem, type CityItem } from './City';
 	import type { SearchComboboxCitiesProps } from './CitySearch.types';
 	import type { Context, NotificationContext } from '../../../services/context';
-	import WeatherDomainsState from '../../../stores/weatherDomainsState.svelte';
-	import WeatherState from '../../../stores/weatherState.svelte';
+	import type { WeatherDomainsState, WeatherState } from '../../../stores';
 	import type { City } from '../../../domain';
+	import type { ForecastResult } from '../../../services/weatherService.types';
+	import { WEATHER_ADAPTERS, GEOCODING_ADAPTERS } from '../../../stores/weatherDomainsState.svelte';
 
 	let {
 		items = $bindable([]),
@@ -33,46 +34,47 @@
 		}
 	});
 
-	const loadWeather = async (cityName: string) => {
+	function applyForecast(result: ForecastResult) {
+		weatherState().city = result.location;
+		weatherState().country = result.country;
+		weatherState().forecast = result.forecast;
+		weatherState().weatherAdapter = WEATHER_ADAPTERS[weatherDomains().weatherKey].label;
+		weatherState().geocodingAdapter = GEOCODING_ADAPTERS[weatherDomains().geocodingKey].label;
+		weatherState().status = { kind: WeatherStateStatusKind.OK };
+	}
+
+	function handleError(message: string) {
+		weatherState().status = { kind: WeatherStateStatusKind.ERROR, error: message };
+		notification().show(message, 'error');
+	}
+
+	onSelect = async (item: CityItem) => {
 		showList = false;
-		if (cityName === '') {
-			return;
-		}
-
 		weatherState().status = { kind: WeatherStateStatusKind.LOADING };
-
 		try {
-			const loc = await weatherDomains().geocoding.searchCity({ name: cityName });
-			if (!loc) {
+			applyForecast(await weatherDomains().services.getForecastForLocation(item));
+		} catch {
+			handleError('Failed to load weather data');
+		}
+	};
+
+	const onPressEnter = async (cityName: string) => {
+		showList = false;
+		if (cityName === '') return;
+		weatherState().status = { kind: WeatherStateStatusKind.LOADING };
+		try {
+			const result = await weatherDomains().services.getForecastForCity(cityName);
+			if (!result) {
 				weatherState().status = {
 					kind: WeatherStateStatusKind.ERROR,
 					error: 'No data found for the specified city'
 				};
 				return;
 			}
-
-			const city = loc.name;
-			const forecast = await weatherDomains().weather.getForecast(loc);
-
-			weatherState().city = city;
-			weatherState().country = loc.country;
-			weatherState().forecast = forecast;
-			weatherState().status = { kind: WeatherStateStatusKind.OK };
+			applyForecast(result);
 		} catch {
-			weatherState().status = {
-				kind: WeatherStateStatusKind.ERROR,
-				error: 'Failed to load weather data'
-			};
-			notification().show('Failed to load weather data', 'error');
+			handleError('Failed to load weather data');
 		}
-	};
-
-	onSelect = (item: CityItem) => {
-		loadWeather(item.name);
-	};
-
-	const onPressEnter = (cityName: string) => {
-		loadWeather(cityName);
 	};
 
 	const searchCities = async (inputValue: string): Promise<CityItem[]> => {

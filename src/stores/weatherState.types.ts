@@ -22,4 +22,6 @@ export type WeatherState = {
 	city?: string;
 	country?: string;
 	forecast?: WeatherForecast;
+	weatherAdapter?: string;
+	geocodingAdapter?: string;
 };

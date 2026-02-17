@@ -1,16 +1,8 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 	import { CitySearch } from '../components/features/CitySearch';
-	import { Text, IconButton, Select } from '../components/ui';
+	import { Text, IconButton } from '../components/ui';
 	import { WeatherStateStatusKind } from '../stores';
-	import {
-		WEATHER_ADAPTERS,
-		GEOCODING_ADAPTERS,
-		REVERSE_GEOCODING_ADAPTERS,
-		switchWeather,
-		switchGeocoding,
-		switchReverseGeocoding
-	} from '../stores/weatherDomainsState.svelte';
 	import type { WeatherDomainsState, WeatherState } from '../stores';
 	import type {
 		Context,
@@ -18,6 +10,7 @@
 		GeolocationContext,
 		NotificationContext
 	} from '../services/context';
+	import { WEATHER_ADAPTERS, GEOCODING_ADAPTERS } from '../stores/weatherDomainsState.svelte';
 
 	const weatherDomains = getContext<Context<WeatherDomainsState>>('weather-domains');
 	const weatherState = getContext<Context<WeatherState>>('weather-state');
@@ -31,14 +24,6 @@
 		day: 'numeric'
 	});
 
-	function toOptions(registry: Record<string, { label: string }>) {
-		return Object.entries(registry).map(([value, { label }]) => ({ value, label }));
-	}
-
-	const weatherOptions = toOptions(WEATHER_ADAPTERS);
-	const geocodingOptions = toOptions(GEOCODING_ADAPTERS);
-	const reverseGeocodingOptions = toOptions(REVERSE_GEOCODING_ADAPTERS);
-
 	async function handleLocate() {
 		const coords = await geolocation().getCurrentPosition();
 		if (!coords) {
@@ -47,13 +32,12 @@
 		}
 		weatherState().status = { kind: WeatherStateStatusKind.LOADING };
 		try {
-			const [city, forecast] = await Promise.all([
-				weatherDomains().reverseGeocoding.reverseGeocode(coords),
-				weatherDomains().weather.getForecast(coords)
-			]);
-			weatherState().city = city?.name ?? 'Current Location';
-			weatherState().country = city?.country ?? '';
-			weatherState().forecast = forecast;
+			const result = await weatherDomains().services.getForecastForCoords(coords);
+			weatherState().city = result.location;
+			weatherState().country = result.country;
+			weatherState().forecast = result.forecast;
+			weatherState().weatherAdapter = WEATHER_ADAPTERS[weatherDomains().weatherKey].label;
+			weatherState().geocodingAdapter = GEOCODING_ADAPTERS[weatherDomains().geocodingKey].label;
 			weatherState().status = { kind: WeatherStateStatusKind.OK };
 		} catch {
 			notification().show('Failed to load weather data', 'error');
@@ -70,9 +54,6 @@
 		<Text variant="caption" color="muted">{today}</Text>
 	</div>
 	<div class="header-right">
-		<Select options={weatherOptions} value={weatherDomains().weatherKey} label="Weather" onchange={switchWeather} />
-		<Select options={geocodingOptions} value={weatherDomains().geocodingKey} label="Search" onchange={switchGeocoding} />
-		<Select options={reverseGeocodingOptions} value={weatherDomains().reverseGeocodingKey} label="Reverse" onchange={switchReverseGeocoding} />
 		<IconButton label="Toggle temperature unit" size="sm" onclick={() => tempUnit().toggleUnit()}>°{tempUnit().unit}</IconButton>
 	</div>
 </header>
@@ -97,9 +78,11 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		gap: 16px;
 		height: 80px;
 		padding: 0 32px;
 		max-width: 1200px;
+    width: 100%;
 		margin: 0 auto;
 	}
 
@@ -117,6 +100,7 @@
 
 	.header-center {
 		flex: 1;
+    width: 300px;
 		text-align: center;
 	}
 

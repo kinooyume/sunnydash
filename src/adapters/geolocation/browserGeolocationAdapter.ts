@@ -13,7 +13,8 @@ export const browserGeolocationAdapter: GeolocationPort = {
 						latitude: pos.coords.latitude,
 						longitude: pos.coords.longitude
 					}),
-				() => resolve(null)
+				() => resolve(null),
+				{ enableHighAccuracy: false, timeout: 10000 }
 			);
 		})
 };

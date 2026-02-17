@@ -3,11 +3,8 @@
 	import { weatherDomains } from '../../stores/weatherDomainsState.svelte';
 	import { weatherState } from '../../stores/weatherState.svelte';
 	import { temperatureUnit, toggleUnit, convertTemp } from '../../stores/temperatureUnit.svelte';
-	import { localStorageAdapter } from '../../adapters/storage';
-	import { browserGeolocationAdapter } from '../../adapters/geolocation';
-	import { storeNotificationAdapter } from '../../adapters/notification';
 
-	const stored = localStorageAdapter.get('temperature-unit');
+	const stored = weatherDomains.storage.get('temperature-unit');
 	if (stored === 'F') temperatureUnit.value = 'F';
 
 	setContext('weather-domains', () => weatherDomains);
@@ -16,13 +13,13 @@
 		unit: temperatureUnit.value,
 		toggleUnit: () => {
 			toggleUnit();
-			localStorageAdapter.set('temperature-unit', temperatureUnit.value);
+			weatherDomains.storage.set('temperature-unit', temperatureUnit.value);
 		},
 		convertTemp
 	}));
-	setContext('storage', () => localStorageAdapter);
-	setContext('geolocation', () => browserGeolocationAdapter);
-	setContext('notification', () => storeNotificationAdapter);
+	setContext('storage', () => weatherDomains.storage);
+	setContext('geolocation', () => weatherDomains.geolocation);
+	setContext('notification', () => weatherDomains.notification);
 
 	let { children } = $props();
 </script>
