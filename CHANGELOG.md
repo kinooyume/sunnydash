@@ -2,6 +2,30 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.2.0 - 2026-02-17
+#### Features
+- add missing mock adapters, service methods, and UI components - (75c733d) - Martin Kinoo
+- add ReverseGeocodingPort with Nominatim adapter - (d4f5626) - Martin Kinoo
+- add NotificationPort with toast notifications - (9a2e451) - Martin Kinoo
+- add GeolocationPort with locate button - (29cb5d4) - Martin Kinoo
+- add StoragePort for persisting user preferences - (81b1e63) - Martin Kinoo
+- reset city and search input when switching API provider - (df5ee18) - Martin Kinoo
+- add Celsius/Fahrenheit temperature unit toggle - (486545f) - Martin Kinoo
+#### Bug Fixes
+- remove broken page skeleton test - (d8b7154) - Martin Kinoo
+- resolve eslint errors and add barrel files for cleaner imports - (aa85527) - Martin Kinoo
+#### Documentation
+- document hexagonal architecture and ports - (4c7c112) - Martin Kinoo
+#### Tests
+- trim redundant notification adapter tests - (4340e78) - Martin Kinoo
+- add unit tests for adapters, domain, and services - (b27cb4c) - Martin Kinoo
+#### Continuous Integration
+- upgrade pipeline with lint, tests, lefthook, and branch protection - (13c3e7a) - Martin Kinoo
+#### Refactoring
+- make adapter switching independent per port - (0c39283) - Martin Kinoo
+
+- - -
+
 ## v0.1.0 - 2026-02-10
 #### Features
 - add package description - (a420dc4) - Martin Kinoo
