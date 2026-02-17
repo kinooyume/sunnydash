@@ -1,5 +1,10 @@
 # SunnyDash
 
+[![CI](https://github.com/kinooyume/sunnydash/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/kinooyume/sunnydash/actions/workflows/ci.yml)
+[![Svelte](https://img.shields.io/badge/Svelte-5-ff3e00?logo=svelte&logoColor=white)](https://svelte.dev)
+[![SvelteKit](https://img.shields.io/badge/SvelteKit-2-ff3e00?logo=svelte&logoColor=white)](https://kit.svelte.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+
 Weather dashboard built with `SvelteKit` and `Svelte 5`, as an example of `Hexagonal Architecture` in a frontend project.
 Weather APIs are swappable via ports and adapters (OpenMeteo and mock for now). Includes unit and E2E tests.
 
@@ -51,9 +56,9 @@ The domain layer defines interfaces (ports) that abstract external dependencies.
 | `WeatherServicePort` | Weather forecast API | OpenMeteo, Mock |
 | `GeocodingPort` | City search (forward) | OpenMeteo, Mock |
 | `ReverseGeocodingPort` | Coords to city name | Nominatim (OpenStreetMap), Mock |
-| `StoragePort` | Key-value persistence | localStorage |
-| `GeolocationPort` | Device location | Browser Geolocation API |
-| `NotificationPort` | User-facing messages | Store-backed toasts |
+| `StoragePort` | Key-value persistence | localStorage, Mock |
+| `GeolocationPort` | Device location | Browser Geolocation API, Mock |
+| `NotificationPort` | User-facing messages | Store-backed toasts, Mock |
 
 Weather, geocoding, and reverse geocoding adapters can each be switched independently from the UI. The other three are standalone infrastructure ports backed by browser APIs.
 
@@ -88,6 +93,24 @@ On Linux, tests use system Chromium. Install via your package manager if needed.
 - [Vitest](https://vitest.dev) for unit tests
 - [Storybook](https://storybook.js.org) for components
 
+## CI/CD
+
+```
+develop ──push/PR──> CI (lint, typecheck, test, build)
+   │
+   └──PR──> main ──push──> Release (bump, changelog, GitHub Release)
+                              │
+                              └── merge back into develop
+```
+
+Commits follow [conventional commits](https://www.conventionalcommits.org). Version bumps and changelog are automated by [cocogitto](https://docs.cocogitto.io).
+
+Lefthook enforces ESLint and commit message format locally on every commit.
+
 ## Credits
 
 Weather icons by [Icons8](https://icons8.com/icons/set/weather--style-dusk)
+
+## License
+
+[MIT](LICENSE)
