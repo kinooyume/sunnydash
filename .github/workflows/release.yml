@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   release:
+    name: Release (bump, changelog, build)
     runs-on: ubuntu-latest
 
     steps:
@@ -18,16 +19,21 @@ jobs:
 
       - name: Bump version and generate changelog
         id: bump
-        uses: cocogitto/cocogitto-action@v3
+        uses: cocogitto/cocogitto-action@v4
         with:
-          release: true
-          check-latest-tag-only: true
+          command: bump
+          args: --auto
           git-user: "github-actions[bot]"
           git-user-email: "github-actions[bot]@users.noreply.github.com"
 
       - name: Push bump commit and tag
         if: steps.bump.outputs.version != ''
-        run: git push origin main --follow-tags
+        run: |
+          git push origin main --follow-tags
+          git fetch origin develop
+          git checkout -B develop origin/develop
+          git merge main --no-edit
+          git push origin develop
 
       - uses: oven-sh/setup-bun@v2
         if: steps.bump.outputs.version != ''
@@ -51,6 +57,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.bump.outputs.version }}
-          name: ${{ steps.bump.outputs.version }}
+          name: Release ${{ steps.bump.outputs.version }}
           body_path: /tmp/release_notes.md
           make_latest: true
