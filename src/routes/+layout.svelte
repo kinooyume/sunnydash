@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Header from '../app/Header.svelte';
+	import Footer from '../app/Footer.svelte';
+	import { Toast } from '../components/ui';
 	import WeatherContext from '../services/context/WeatherContext.svelte';
 
 	let { children } = $props();
@@ -43,6 +45,8 @@
 		<main class="container">
 			{@render children()}
 		</main>
+		<Footer />
+		<Toast />
 	</div>
 </WeatherContext>
 
@@ -86,6 +90,8 @@
 	.app {
 		position: relative;
 		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.noise {
@@ -103,5 +109,6 @@
 		max-width: 1200px;
 		margin: 0 auto;
 		padding: 0 24px 48px;
+		flex: 1;
 	}
 </style>

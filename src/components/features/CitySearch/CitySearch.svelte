@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 	import { WeatherStateStatusKind } from '../../../stores';
-	import SearchCombobox from '../../shared/SearchCombobox/SearchCombobox.svelte';
-	import CitySearchItem from './City/CitySearchItem.svelte';
-	import type { CityItem } from './City/CitySearchItem.types';
+	import { SearchCombobox } from '../../shared/SearchCombobox';
+	import { CitySearchItem, type CityItem } from './City';
 	import type { SearchComboboxCitiesProps } from './CitySearch.types';
-	import type { Context } from '../../../services/context/context.types';
-	import WeatherDomainsState from '../../../stores/weatherDomainsState.svelte';
-	import WeatherState from '../../../stores/weatherState.svelte';
-	import type { City, GeocodingPort } from '../../../domain/geocoding';
+	import type { Context, NotificationContext } from '../../../services/context';
+	import type { WeatherDomainsState, WeatherState } from '../../../stores';
+	import type { City } from '../../../domain';
+	import type { ForecastResult } from '../../../services/weatherService.types';
+	import { WEATHER_ADAPTERS, GEOCODING_ADAPTERS } from '../../../stores/weatherDomainsState.svelte';
 
 	let {
 		items = $bindable([]),
@@ -19,48 +19,62 @@
 
 	let weatherDomains = getContext<Context<WeatherDomainsState>>('weather-domains');
 	let weatherState = getContext<Context<WeatherState>>('weather-state');
+	let notification = getContext<Context<NotificationContext>>('notification');
 
-	const loadWeather = async (cityName: string) => {
-		showList = false;
-		if (cityName === '') {
-			return;
+	let inputValue = $state('');
+
+	$effect(() => {
+		const state = weatherState();
+		if (state.status.kind === WeatherStateStatusKind.INITIAL) {
+			inputValue = '';
+			items = [];
+		} else if (state.status.kind === WeatherStateStatusKind.OK && state.city) {
+			inputValue = state.city;
+			showList = false;
 		}
+	});
 
+	function applyForecast(result: ForecastResult) {
+		weatherState().city = result.location;
+		weatherState().country = result.country;
+		weatherState().forecast = result.forecast;
+		weatherState().weatherAdapter = WEATHER_ADAPTERS[weatherDomains().weatherKey].label;
+		weatherState().geocodingAdapter = GEOCODING_ADAPTERS[weatherDomains().geocodingKey].label;
+		weatherState().status = { kind: WeatherStateStatusKind.OK };
+	}
+
+	function handleError(message: string) {
+		weatherState().status = { kind: WeatherStateStatusKind.ERROR, error: message };
+		notification().show(message, 'error');
+	}
+
+	onSelect = async (item: CityItem) => {
+		showList = false;
 		weatherState().status = { kind: WeatherStateStatusKind.LOADING };
-
 		try {
-			const loc = await weatherDomains().geocoding.searchCity({ name: cityName });
-			if (!loc) {
+			applyForecast(await weatherDomains().services.getForecastForLocation(item));
+		} catch {
+			handleError('Failed to load weather data');
+		}
+	};
+
+	const onPressEnter = async (cityName: string) => {
+		showList = false;
+		if (cityName === '') return;
+		weatherState().status = { kind: WeatherStateStatusKind.LOADING };
+		try {
+			const result = await weatherDomains().services.getForecastForCity(cityName);
+			if (!result) {
 				weatherState().status = {
 					kind: WeatherStateStatusKind.ERROR,
 					error: 'No data found for the specified city'
 				};
 				return;
 			}
-
-			const city = loc.name;
-			const forecast = await weatherDomains().weather.getForecast(loc);
-
-			weatherState().city = city;
-			weatherState().country = loc.country;
-			weatherState().forecast = forecast;
-			weatherState().status = { kind: WeatherStateStatusKind.OK };
-		} catch (err) {
-			weatherState().status = {
-				kind: WeatherStateStatusKind.ERROR,
-				error: 'Failed to load weather data'
-			};
-			console.error(err);
-		} finally {
+			applyForecast(result);
+		} catch {
+			handleError('Failed to load weather data');
 		}
-	};
-
-	onSelect = (item: CityItem) => {
-		loadWeather(item.name);
-	};
-
-	const onPressEnter = (cityName: string) => {
-		loadWeather(cityName);
 	};
 
 	const searchCities = async (inputValue: string): Promise<CityItem[]> => {
@@ -79,8 +93,8 @@
 						country_code: city.country_code
 					}))
 				: [];
-		} catch (error) {
-			console.error('Error searching cities:', error);
+		} catch {
+			notification().show('Error searching cities', 'error');
 			return [];
 		}
 	};
@@ -90,7 +104,7 @@
 	};
 </script>
 
-<SearchCombobox bind:items {placeholder} {onSelect} {onPressEnter} {onKeyDown}>
+<SearchCombobox bind:items bind:inputValue {placeholder} {onSelect} {onPressEnter} {onKeyDown}>
 	{#snippet children(item)}
 		<CitySearchItem item={item as CityItem} />
 	{/snippet}

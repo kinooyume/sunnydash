@@ -1,4 +1,4 @@
-import type { GeocodingPort, GeocodingProps, City } from '../../../domain/geocoding';
+import type { GeocodingPort, GeocodingProps, City } from '../../../domain';
 
 const searchCities = async ({ name, count = 1 }: GeocodingProps): Promise<City[] | null> => {
 	const res = await fetch(
@@ -10,9 +10,7 @@ const searchCities = async ({ name, count = 1 }: GeocodingProps): Promise<City[]
 	if (data && Array.isArray(data.results)) {
 		return data.results;
 	}
-	{
-		return null;
-	}
+	return null;
 };
 
 export const openMeteoGeocodingAdapter: GeocodingPort = {

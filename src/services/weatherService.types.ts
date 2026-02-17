@@ -1,14 +1,26 @@
-import type { GeocodingPort } from '../domain/geocoding';
-import type { WeatherForecast, WeatherServicePort } from '../domain/weather';
+import type {
+	City,
+	Coordinates,
+	GeocodingPort,
+	ReverseGeocodingPort,
+	WeatherForecast,
+	WeatherServicePort
+} from '../domain';
 
 export type CreateWeatherAppServiceProps = {
 	geo: GeocodingPort;
+	reverseGeo: ReverseGeocodingPort;
 	weather: WeatherServicePort;
 };
 
+export type ForecastResult = {
+	location: string;
+	country: string;
+	forecast: WeatherForecast;
+};
+
 export type WeatherAppService = {
-	getForecastForCity: (city: string) => Promise<{
-		location: string;
-		forecast: WeatherForecast;
-	} | null>;
+	getForecastForCity: (name: string) => Promise<ForecastResult | null>;
+	getForecastForLocation: (city: City) => Promise<ForecastResult>;
+	getForecastForCoords: (coords: Coordinates) => Promise<ForecastResult>;
 };

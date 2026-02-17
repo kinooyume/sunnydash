@@ -1,0 +1,1 @@
+export { storeNotificationAdapter } from './storeNotificationAdapter';

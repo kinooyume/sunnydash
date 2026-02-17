@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="Item extends BaseItem">
 	import type { BaseItem, KeyPressedActions, SearchComboboxProps } from './SearchCombobox.types';
 
 	let {
@@ -10,7 +10,7 @@
 		onKeyDown,
 		onSelect,
 		children
-	}: SearchComboboxProps<any> = $props();
+	}: SearchComboboxProps<Item> = $props();
 
 	let focusedItemIndex = $state<number | null>(null);
 
@@ -68,9 +68,9 @@
 		]
 	]);
 
-	function debounce(func: Function, delay: number) {
+	function debounce(func: (...args: unknown[]) => void, delay: number) {
 		let timeout: NodeJS.Timeout;
-		return (...args: any[]) => {
+		return (...args: unknown[]) => {
 			clearTimeout(timeout);
 			timeout = setTimeout(() => func(...args), delay);
 		};
@@ -89,7 +89,7 @@
 		debounce(() => onKeyDown?.(inputValue), 300)();
 	}
 
-	function choose(item: BaseItem) {
+	function choose(item: Item) {
 		inputValue = item.name;
 		showList = false;
 		focusedItemIndex = null;
@@ -122,7 +122,7 @@
 
 	{#if showList && items.length > 0}
 		<ul id="search-list" role="listbox">
-			{#each items as item, i}
+			{#each items as item, i (item.id)}
 				<li
 					role="option"
 					aria-selected={focusedItemIndex === i}

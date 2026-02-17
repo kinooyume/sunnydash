@@ -1,4 +1,2 @@
-import { openMeteoGeocodingAdapter } from './geocoding/openMeteoGeocoding';
-import { openMeteoWeatherAdapter } from './weather/openMeteoWeather';
-
-export { openMeteoGeocodingAdapter, openMeteoWeatherAdapter };
+export { openMeteoGeocodingAdapter } from './geocoding/openMeteoGeocoding';
+export { openMeteoWeatherAdapter } from './weather/openMeteoWeather';

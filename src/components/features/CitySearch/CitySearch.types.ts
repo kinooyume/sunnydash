@@ -1,4 +1,4 @@
-import type { BaseSearchComboboxProps } from '../../shared/SearchCombobox/SearchCombobox.types';
-import type { CityItem } from './City/CitySearchItem.types';
+import type { BaseSearchComboboxProps } from '../../shared/SearchCombobox';
+import type { CityItem } from './City';
 
-export interface SearchComboboxCitiesProps extends BaseSearchComboboxProps<CityItem> {}
+export type SearchComboboxCitiesProps = BaseSearchComboboxProps<CityItem>;

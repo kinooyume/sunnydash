@@ -26,7 +26,7 @@
 			<span class="select-label">{label}</span>
 		{/if}
 		<select class="select" {value} onchange={handleChange}>
-			{#each options as option}
+			{#each options as option (option.value)}
 				<option value={option.value}>{option.label}</option>
 			{/each}
 		</select>

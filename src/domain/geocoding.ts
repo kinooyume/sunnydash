@@ -6,7 +6,6 @@ export interface City {
 	country_code: string;
 }
 
-// add props name + count
 export interface GeocodingProps {
 	name: string;
 	count?: number;
@@ -15,6 +14,10 @@ export interface GeocodingProps {
 export interface GeocodingPort {
 	searchCities(props: GeocodingProps): Promise<City[] | null>;
 	searchCity(props: GeocodingProps): Promise<City | null>;
+}
+
+export interface ReverseGeocodingPort {
+	reverseGeocode(coords: { latitude: number; longitude: number }): Promise<City | null>;
 }
 
 export function createEmptyGeocodingPort(): GeocodingPort {

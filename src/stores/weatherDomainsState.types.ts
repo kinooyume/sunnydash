@@ -1,26 +1,28 @@
-import type { GeocodingPort } from '../domain/geocoding';
-import type { WeatherServicePort } from '../domain/weather';
-import type { WeatherAppService } from '../services/weatherService.types';
+import type {
+	GeocodingPort,
+	GeolocationPort,
+	NotificationPort,
+	ReverseGeocodingPort,
+	StoragePort,
+	WeatherServicePort
+} from '../domain';
+import type { WeatherAppService } from '../services';
 
-export enum WeatherDomainsStateStatus {
-	OPEN_METEO = 'openMeteo',
-	MOCK = 'mock'
-}
-
-export const API_PROVIDERS = {
-	[WeatherDomainsStateStatus.OPEN_METEO]: {
-		label: 'Open-Meteo',
-		description: 'Free weather API'
-	},
-	[WeatherDomainsStateStatus.MOCK]: {
-		label: 'Mock API',
-		description: 'Local mock data'
-	}
-} as const;
+export type AdapterEntry<T> = { label: string; adapter: T };
+export type AdapterRegistry<T> = Record<string, AdapterEntry<T>>;
 
 export type WeatherDomainsState = {
-	status: WeatherDomainsStateStatus;
-	geocoding: GeocodingPort;
+	weatherKey: string;
+	geocodingKey: string;
+	reverseGeocodingKey: string;
+	geolocationKey: string;
+	notificationKey: string;
+	storageKey: string;
 	weather: WeatherServicePort;
+	geocoding: GeocodingPort;
+	reverseGeocoding: ReverseGeocodingPort;
+	geolocation: GeolocationPort;
+	notification: NotificationPort;
+	storage: StoragePort;
 	services: WeatherAppService;
 };

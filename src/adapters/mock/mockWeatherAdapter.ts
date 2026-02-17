@@ -1,4 +1,4 @@
-import type { Coordinates, WeatherForecast, WeatherServicePort } from '../../domain/weather';
+import type { Coordinates, WeatherForecast, WeatherServicePort } from '../../domain';
 import { mockForecasts, createMockForecast } from './mockData';
 
 const coordsToCity: Record<string, string> = {
